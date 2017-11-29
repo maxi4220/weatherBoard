@@ -24,19 +24,19 @@
               <thead>
                 <tr>
                   <th>City</th>
-                  <th>Humidity</th>
-                  <th>Pressure</th>
-                  <th>Temperature</th>
-                  <th>Text</th>
+                  <th>Rh</th>
+                  <th>Pres</th>
+                  <th>T°</th>
+                  <th>Sky</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
                 <tr ng-repeat="city in board.cities">
                   <td>{{city.name}}</td>
-                  <td>{{city.humidity}}</td>
-                  <td>{{city.pressure}}</td>
-                  <td>{{city.temp}}</td>
+                  <td>{{city.humidity}} %</td>
+                  <td>{{city.pressure}} hPa</td>
+                  <td>{{ ((city.temp-32)/1.8).toFixed(1)}} °</td>
                   <td>{{city.text}}</td>
                   <td>
                     <button class="btn btn-sm btn-danger" ng-click="removeCity(board.id, city.id)">
@@ -68,11 +68,12 @@
         <h4 class="modal-title">Cities</h4>
       </div>
       <div class="modal-body form-group">
-        <div class="">
-          <ul>
-            <li ng-repeat="city in cities"><input type="checkbox" value="{{city.id}}" ng-click="selectCity(city.id)" class="chkCities" />{{city.name}}</li>
-          </ul>
-          
+        <div class="checkbox" ng-repeat="city in cities">
+          <label>
+            <input type="checkbox" value="{{city.id}}" ng-click="selectCity(city.id)" class="chkCities" />
+            <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+            {{city.name}}
+          </label>
         </div>
       </div>
       <div class="modal-footer">
