@@ -46,7 +46,7 @@
               </div>
             </div>
 
-            <table cellpadding="0" cellspacing="0" class="table table-striped">
+            <table cellpadding="0" cellspacing="0" class="table table-striped ">
               <thead>
                 <tr>
                   <th>City</th>
@@ -57,13 +57,19 @@
                   <th></th>
                 </tr>
               </thead>
+              <!--
+                hot #F44336
+                warm #FFC107
+                cold #2196F3
+
+              -->
               <tbody>
                 <tr ng-repeat="city in board.cities">
                   <td>{{city.name}}</td>
                   <td nowrap>{{city.humidity}} %</td>
                   <td nowrap>{{city.pressure}} hPa</td>
-                  <td nowrap>{{ ((city.temp-32)/1.8).toFixed(1)}} °</td>
-                  <td nowrap>{{city.text}}</td>
+                  <td nowrap>{{ ((city.temp-32)/1.8).toFixed(1) }} °</td>
+                  <td nowrap><img src="images/{{city.text}}.png" alt="{{city.text}}" title="{{city.text}}" class="img-responsive" /></td>
                   <td align="right">
                     <button class="btn btn-xs btn-danger" ng-click="removeCity(board.id, city.id)">
                       <i class="glyphicon glyphicon-remove"> </i>
