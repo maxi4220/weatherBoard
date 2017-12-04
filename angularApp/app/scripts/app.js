@@ -8,4 +8,4 @@
  *
  * Main module of the application.
  */
-const weatherBoardApp = angular.module("weatherBoardApp", ["ngNotify", "ngCookies"])
+var weatherBoardApp = angular.module("weatherBoardApp", ["ngNotify"])

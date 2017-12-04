@@ -8,7 +8,10 @@
  * Controller of the weatherBoardApp
  */
 weatherBoardApp
-  .controller('MainCtrl', ["$rootScope", "$scope", "ngNotify", "mainService", ($rootScope, $scope, ngNotify, mainService) => {
+  .controller('MainCtrl', ["$rootScope", "$scope", "ngNotify", "mainService", "$timeout", ($rootScope, $scope, ngNotify, mainService, $timeout) => {
+
+    const ENTER_KEY = 13;
+    const ESCAPE_KEY = 27;
 
     $rootScope.welcomeShowed = true;
     $rootScope.boardsShowed = false;
@@ -17,9 +20,21 @@ weatherBoardApp
     $scope.selectedIdBoard = 0;
     $scope.selectedCities = [];
     $scope.cities = [];
-    $scope.allCities = [];
     $scope.socket = null;
+    $scope.showAll = true;
+    $scope.showEditBoardButton = [];
+    $scope.tmpBoardName = "";
 
+    var movementStrength = 25;
+    var height = movementStrength / $(window).height();
+    var width = movementStrength / $(window).width();
+    $(".background-image").mousemove(function(e){
+              var pageX = e.pageX - ($(window).width() / 2);
+              var pageY = e.pageY - ($(window).height() / 2);
+              var newvalueX = width * pageX * -1 - 50;
+              var newvalueY = height * pageY * -1 - 100;
+              $('.background-image').css("background-position", newvalueX+"px     "+newvalueY+"px");
+    });
 
     $scope.login = () => {
         ngNotify.set("Logging in ...", "info");
@@ -40,6 +55,7 @@ weatherBoardApp
                         $scope.defineSocketEvents();
 
                     	$scope.cities = [];
+
                         const user = {"id":response.data, "name":userName};
                         // Validated the user is found
                         angular.element(document.querySelector('#loginForm')).modal('hide');
@@ -72,15 +88,6 @@ weatherBoardApp
         }
     };
 
-    $scope.selectCity = idCity => {
-    	const idx = $scope.selectedCities.indexOf(idCity);
-    	if(idx>-1) {
-    		$scope.selectedCities.splice(idx, 1);
-    	} else {
-    		$scope.selectedCities.push(idCity);
-    	}
-    };    
-
     $scope.loadCities = (callback) => {
 		// Gets all cities 
 		mainService.loadCities(response => {
@@ -88,28 +95,33 @@ weatherBoardApp
             if(response.status !== "success") {
                 ngNotify.set(response.data, response.status);
             } else {
+
                 $scope.cities = response.data;
-                $scope.allCities = response.data;
+                angular.forEach($scope.cities, city => {
+                    city.checked=false;
+                });
                 callback();
 			}
 		});
     };
 
     $scope.addCities = () => {
-		// Add a new board for the current user
-		mainService.addCities($scope.selectedIdBoard, $scope.selectedCities, response => {
-            // Got an error
-            if(response.status !== "success") {
-                ngNotify.set(response.data, response.status);
-            } else {
-                ngNotify.set("Cities added!", response.status);
+        if($scope.selectedCities.length>0){
+    		// Add a new board for the current user
+    		mainService.addCities($scope.selectedIdBoard, $scope.selectedCities, response => {
+                // Got an error
+                if(response.status !== "success") {
+                    ngNotify.set(response.data, response.status);
+                } else {
+                    ngNotify.set("Cities added!", response.status);
 
-                // Adds the selected cities to the stored array 
-        		const i = mainService.getBoardByIdBoard($scope.selectedIdBoard, $scope.boards);
-        		$scope.boards[i].cities = $scope.boards[i].cities.concat(response.data);
-        		$scope.emitCitiesStatus();
-			}
-		});
+                    // Adds the selected cities to the stored array 
+            		const i = mainService.getBoardByIdBoard($scope.selectedIdBoard, $scope.boards);
+            		$scope.boards[i].cities = $scope.boards[i].cities.concat(response.data);
+            		$scope.emitCitiesStatus();
+    			}
+    		});
+        }
     };
 
     $scope.removeCity = (idBoard, idCity) => {
@@ -133,23 +145,23 @@ weatherBoardApp
 		});
     };
 
-    $scope.getCities = (idBoard, idBoards) => {
+    $scope.getCities = (board, boards) => {
 
         // Gets status of all cities in a board
-        mainService.getCitiesByIdBoard(idBoard, response => {
+        mainService.getCitiesByIdBoard(board.id, response => {
 			
 			// Got an error
             if(response.status !== "success") {
                 ngNotify.set(response.data, response.status);
             } else {
             	// Creates the board object and pushes it to our boards array
-        		const board = {"id": idBoard, "cities": response.data};
+        		board.cities = response.data;
         		$scope.addBoardCities(board);
         		
-        		idBoards.splice(idBoards.indexOf(idBoard),1);
+        		boards.splice(boards.indexOf(board),1);
         		
-        		if(idBoards.length>0){
-        			$scope.getCities(idBoards[0], idBoards);
+        		if(boards.length>0){
+        			$scope.getCities(boards[0], boards);
         		} else {
         			$rootScope.boardsShowed = true;
         		}
@@ -159,10 +171,9 @@ weatherBoardApp
     };
 
     $scope.selectBoard = idBoard => {
-    	
-    	$scope.selectedIdBoard = idBoard;
-    	$scope.selectedCities = [];
     	const cities = angular.element(".chkCities");
+        $scope.selectedIdBoard = idBoard;
+        
     	for(let city of cities) {
     		city.checked = false;
     	}
@@ -176,9 +187,12 @@ weatherBoardApp
                 ngNotify.set(response.data, response.status);
             } else {
 
-				const idBoards = response.data;
+				const boards = response.data;
 				$scope.boards = [];
-				$scope.getCities(idBoards[0], idBoards);
+                for(let i = 0; i < boards.length;i++){
+                    $scope.showEditBoardButton[i] = true;
+                }
+				$scope.getCities(boards[0], boards);
             	
             }
         });
@@ -192,8 +206,9 @@ weatherBoardApp
                 ngNotify.set(response.data, response.status);
             } else {
                 ngNotify.set("Board added!", response.status);
-
-                $scope.showBoards($scope.user.name);
+                $scope.boards.push({"id":parseInt(response.data.id), "iduser":0, "cities":[], "name":response.data.name});
+                $scope.showEditBoardButton.push(true);
+                //$scope.showBoards($scope.user.name);
 			}
 		});
     };
@@ -258,5 +273,64 @@ weatherBoardApp
                 });                
             });
         } 
+    };
+
+
+    $scope.selectCity = idCity => {
+        idCity = parseInt(idCity);
+        const idx = $scope.selectedCities.indexOf(idCity);
+        // If found, it is removed
+        if(idx>-1) {
+            $scope.selectedCities.splice(idx, 1);
+            $scope.cities[idCity-1].checked = false;
+        } else {
+            // If not, it is added
+            $scope.selectedCities.push(idCity);
+            $scope.cities[idCity-1].checked = true;
+        }
+
+    };    
+
+    $scope.selectCheckboxes = () => {
+        angular.forEach(angular.element(".chkCities"), chkElement =>{
+            $scope.selectCity(chkElement.value);
+        });
+    };
+
+    $scope.editBoardName = ($event, $index) => {
+        $event.stopPropagation();
+        $scope.showEditBoardButton[$index] = false;
+        $scope.tmpBoardName = $scope.boards[$index].name;
+        $scope.focusOn("boardName"+$scope.boards[$index].id, 0);
+    };
+
+    $scope.changeBoardName = ($event, $index) => {
+        $event.stopPropagation();
+        $scope.showEditBoardButton[$index] = true;
+        mainService.changeBoardName($scope.boards[$index], response => {            
+            // Got an error
+            if(response.status !== "success") {
+                ngNotify.set(response.data, response.status);
+            } else {
+               ngNotify.set("Name changed!", response.status);
+            }
+        });
+    };
+
+    $scope.cancelChangeBoardName = ($event, $index) => {
+        $event.stopPropagation();
+        $scope.boards[$index].name = $scope.tmpBoardName;
+        $scope.showEditBoardButton[$index] = true;
+    };
+
+    $scope.changeCancelBoardName = ($event, $index) => {
+        // When enter is pressed
+        if($event.keyCode === ENTER_KEY) {
+            $scope.changeBoardName($event, $index);
+        }
+    };
+
+    $scope.focusOn = (id, ms) => {
+        $timeout(() => {angular.element("#"+id).focus()}, ms);
     };
 }]);

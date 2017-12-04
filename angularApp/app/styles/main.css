@@ -7,6 +7,15 @@
 
 body {
   padding: 0;
+  background:url("/images/background.jpg") -50px -100px;
+  position:fixed ;
+  top:0;
+  width:100%;
+  z-index:0;
+  height:100%;
+  background-size: calc(100% + 100px);
+  opacity: 0.9;
+  overflow: auto;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -15,6 +24,7 @@ body {
 .footer {
   padding-left: 15px;
   padding-right: 15px;
+  background-color:#ccc;
 }
 
 /* Custom page header */
@@ -36,6 +46,9 @@ body {
   padding-top: 19px;
   color: #777;
   border-top: 1px solid #e5e5e5;
+  position: fixed;
+  bottom:0;
+  width:100%;
 }
 
 .container-narrow > hr {
@@ -101,20 +114,44 @@ body {
 .checkbox label input[type="checkbox"] {
   display: none;
 }
-
-.checkbox label input[type="checkbox"]+.cr>.cr-icon {
-  opacity: 0;
-}
-
-.checkbox label input[type="checkbox"]:checked+.cr>.cr-icon {
-  opacity: 1;
-}
-
-.checkbox label input[type="checkbox"]:disabled+.cr {
-  opacity: .5;
-}
 .panel-heading {
-  border-left: 4px solid;
+  padding: 0;
+}
+.panel-title{
+  padding: 8px;
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+  cursor: pointer;
+  margin-bottom: 1px;
+}
+.panel-title-text {
+  display: inline-block;
+  width: 95%
+}
+.panel-title-icon {
+  width:4%;
+  text-align: right;
+}
+.glyphicon-pencil{
+  cursor: pointer;
+}
+.card {
+  background: #f9f9f9;
+  border-radius: 2px;
+  margin: 1rem;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  padding:5rem;
+  padding-top:1rem;
+  max-height: 700px;
+  overflow: auto;
+}
+.nav-card {
+  margin:0;
+  padding:1rem;
+}
+.panel-body {
+  overflow: auto;
 }
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
@@ -136,4 +173,13 @@ body {
   .jumbotron {
     border-bottom: 0;
   }
+}
+@media (max-height:800px){
+  body {
+    overflow: auto;
+  }
+  .footer {
+    position: static;
+  }
+
 }

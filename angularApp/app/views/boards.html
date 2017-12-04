@@ -1,21 +1,47 @@
-<div class="">
-  <h1>Boards</h1>
+<div class="card">
+  <h1 class="display-1">Boards</h1>
 
   <div class="panel-group" id="panelBoards">
-    <div class="panel panel-default">
+    <div class="panel panel-default" id="accordion">
       <div class="panel-heading" ng-repeat="board in boards" ng-click="emitCitiesStatus()">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#panelBoards" href="#contentBoard{{board.id}}">Board {{board.id}}</a>
-        </h4>
+        <div class="panel-title" data-toggle="collapse" data-parent="#panelBoards" data-target="#contentBoard{{board.id}}">
+          <div class="row">
+            <div class="col-lg-6">
+              <div ng-show="showEditBoardButton[$index]" ng-dblclick="editBoardName($event, $index)">{{board.name}}</div>
+              <div ng-show="!showEditBoardButton[$index]">
+                <span class="input-group">
+                  <input type="text" class="form-control" id="boardName{{board.id}}" value="Board {{board.id}}" 
+                    ng-model="board.name" 
+                    ng-click="$event.stopPropagation()"
+                    ng-keypress="changeCancelBoardName($event, $index)" 
+                    maxlength="15"/>
+                  <span class="input-group-btn">
+                    <button class="btn btn-success" ng-click="changeBoardName($event, $index)">
+                      <i class="glyphicon glyphicon-ok"></i>
+                    </button>
+                    <button class="btn btn-danger" ng-click="cancelChangeBoardName($event, $index)">
+                      <i class="glyphicon glyphicon-remove"></i>
+                    </button>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div class="col-lg-6" align="right">
+              <div ng-show="showEditBoardButton[$index]">
+                <button class="btn btn-default btn-xs" ng-click="editBoardName($event, $index)">
+                  <i class="glyphicon glyphicon-pencil"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div id="contentBoard{{board.id}}" class="panel-collapse collapse">
           <div class="panel-body">
-            
             <div class="row">
               <div class="col-lg-6">Cities</div>
               <div class="col-lg-6" align="right">
-                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#citiesList" ng-click="selectBoard(board.id)">
-                  <span class="glyphicon glyphicon-plus-sign"> </span> 
-                  Add cities                   
+                <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#citiesList" ng-click="selectBoard(board.id)">
+                  <i class="glyphicon glyphicon-plus"></i>
                 </button>
               </div>
             </div>
@@ -34,27 +60,24 @@
               <tbody>
                 <tr ng-repeat="city in board.cities">
                   <td>{{city.name}}</td>
-                  <td>{{city.humidity}} %</td>
-                  <td>{{city.pressure}} hPa</td>
-                  <td>{{ ((city.temp-32)/1.8).toFixed(1)}} °</td>
-                  <td>{{city.text}}</td>
-                  <td>
-                    <button class="btn btn-sm btn-danger" ng-click="removeCity(board.id, city.id)">
-                      <span class="glyphicon glyphicon-remove"> </span> 
-                      Remove
+                  <td nowrap>{{city.humidity}} %</td>
+                  <td nowrap>{{city.pressure}} hPa</td>
+                  <td nowrap>{{ ((city.temp-32)/1.8).toFixed(1)}} °</td>
+                  <td nowrap>{{city.text}}</td>
+                  <td align="right">
+                    <button class="btn btn-xs btn-danger" ng-click="removeCity(board.id, city.id)">
+                      <i class="glyphicon glyphicon-remove"> </i>
                     </button>
                   </td>
                 </tr>
               </tbody>
             </table>
-
-
           </div>
         </div>
       </div>
     </div>
   </div>
-  <button type="button" class="btn btn-primary btn-sm" ng-click="addBoard()"><span class="glyphicon glyphicon-plus-sign"> </span> Add board</button>
+  <button type="button" class="btn btn-primary btn-sm" ng-click="addBoard()"><span class="glyphicon glyphicon-plus"> </span> Add board</button>
 </div>
 
 <!-- Modal -->
@@ -71,11 +94,15 @@
         <div class="checkbox" ng-repeat="city in cities">
           <label>
             <input type="checkbox" value="{{city.id}}" ng-click="selectCity(city.id)" class="chkCities" />
-            <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+            <span class="cr"><i class="cr-icon glyphicon glyphicon-ok" ng-show="cities[$index].checked" id="crIcon{{city.id}}"></i></span>
             {{city.name}}
           </label>
         </div>
+        <div class="container">
+          <button class="btn btn-primary btn-xs" ng-show="showAll" ng-click="selectCheckboxes()">Check inverse</button>
+        </div>
       </div>
+
       <div class="modal-footer">
         <button class="btn btn-primary" data-dismiss="modal" ng-click="addCities()">Add</button>
         <button class="btn btn-default" data-dismiss="modal">Cancel</button>
