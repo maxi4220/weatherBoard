@@ -93,6 +93,7 @@ weatherBoardApp
         $scope.showEditBoardButton = [];
         $scope.tmpBoardName = "";
         $scope.loggedIn = false;
+        io.disconnect();
     };
 
     $scope.loginEvent = e => {
