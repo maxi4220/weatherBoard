@@ -8,7 +8,6 @@
 body {
   padding: 0;
   background:url("/images/background.jpg") -50px -100px;
-  position:fixed ;
   top:0;
   width:100%;
   z-index:0;
@@ -140,11 +139,11 @@ body {
   background: #f9f9f9;
   border-radius: 2px;
   margin: 1rem;
+  margin-bottom:10rem;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   padding:5rem;
   padding-top:1rem;
-  max-height: 700px;
-  overflow: auto;
+
 }
 .nav-card {
   margin:0;
@@ -152,6 +151,40 @@ body {
 }
 .panel-body {
   overflow: auto;
+}
+.cold-color {
+  color:#2196F3;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px #fff;
+}
+.warm-color {
+  color:#eeb101;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px #fff;
+}
+.hot-color {
+  color:#F44336;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px #fff;
+}
+.boiling-color {
+  color:#FF632E;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px #fff;
+}
+.fade-in-fx {
+  animation: fadein 0.75s;
+}
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+table.table > tbody > tr > td {
+  vertical-align: middle;
 }
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
@@ -181,5 +214,11 @@ body {
   .footer {
     position: static;
   }
-
+  .header {
+    position:static;
+    top:0;
+  } 
+  .card {    
+    margin-bottom:3rem;
+  }
 }

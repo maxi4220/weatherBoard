@@ -24,7 +24,7 @@ weatherBoardApp
     $scope.showAll = true;
     $scope.showEditBoardButton = [];
     $scope.tmpBoardName = "";
-
+    $scope.loggedIn = false;
     var movementStrength = 25;
     var height = movementStrength / $(window).height();
     var width = movementStrength / $(window).width();
@@ -53,7 +53,7 @@ weatherBoardApp
                     } else {
 
                         $scope.defineSocketEvents();
-
+                        $scope.loggedIn = true;
                     	$scope.cities = [];
 
                         const user = {"id":response.data, "name":userName};
@@ -78,6 +78,21 @@ weatherBoardApp
         } catch(ex) {
             ngNotify.set(ex.message, "error");
         }
+    };
+
+    $scope.logout = () => {
+        $rootScope.welcomeShowed = true;
+        $rootScope.boardsShowed = false;
+        $scope.boards = [];
+        $scope.user = {};
+        $scope.selectedIdBoard = 0;
+        $scope.selectedCities = [];
+        $scope.cities = [];
+        $scope.socket = null;
+        $scope.showAll = true;
+        $scope.showEditBoardButton = [];
+        $scope.tmpBoardName = "";
+        $scope.loggedIn = false;
     };
 
     $scope.loginEvent = e => {
@@ -173,10 +188,6 @@ weatherBoardApp
     $scope.selectBoard = idBoard => {
     	const cities = angular.element(".chkCities");
         $scope.selectedIdBoard = idBoard;
-        
-    	for(let city of cities) {
-    		city.checked = false;
-    	}
     };
 
     $scope.showBoards = userName => {
@@ -233,46 +244,48 @@ weatherBoardApp
 
     $scope.defineSocketEvents = () => {
         
-        if(!$scope.socket){
-            $scope.socket = io.connect('http://localhost:9000');
-            $scope.socket.on("citiesStatus", savedCities => {
-                $scope.$apply(() => {
-                    let boards = $scope.boards;
-                    let cities;
+        if($scope.socket){
+            io.disconnect();
+        }
+        $scope.socket = io.connect('http://localhost:9000');
+        $scope.socket.on("citiesStatus", savedCities => {
+            $scope.$apply(() => {
+                let boards = $scope.boards;
+                let cities;
 
-                    savedCities = JSON.parse(savedCities);
-                    
-                    // Loops all updated cities
-                    for(let i = 0, savedCitiesLen = savedCities.length;
-                            i < savedCitiesLen;
-                            i++) {
+                savedCities = JSON.parse(savedCities);
+                
+                // Loops all updated cities
+                for(let i = 0, savedCitiesLen = savedCities.length;
+                        i < savedCitiesLen;
+                        i++) {
 
-                        // Loops the current user boards
-                        for(let j = 0, boardsLen = boards.length;
-                                j < boardsLen;
-                                j++) {
+                    // Loops the current user boards
+                    for(let j = 0, boardsLen = boards.length;
+                            j < boardsLen;
+                            j++) {
 
-                            // Current board
-                            cities = boards[j].cities;
+                        // Current board
+                        cities = boards[j].cities;
 
-                            // Loops all cities of the current board
-                            for(let k = 0, citiesLen = cities.length;
-                                k < citiesLen;
-                                k++) {
+                        // Loops all cities of the current board
+                        for(let k = 0, citiesLen = cities.length;
+                            k < citiesLen;
+                            k++) {
 
-                                // Updates our $scope cities array so that the changes are seen on the view
-                                if($scope.boards[j].cities[k].id == savedCities[i].id) {
-                                    $scope.boards[j].cities[k].humidity = savedCities[i].humidity;
-                                    $scope.boards[j].cities[k].pressure = savedCities[i].pressure;
-                                    $scope.boards[j].cities[k].temp = savedCities[i].temp;
-                                    $scope.boards[j].cities[k].text = savedCities[i].text;
-                                }
+                            // Updates our $scope cities array so that the changes are seen on the view
+                            if($scope.boards[j].cities[k].id == savedCities[i].id) {
+                                $scope.boards[j].cities[k].humidity = savedCities[i].humidity;
+                                $scope.boards[j].cities[k].pressure = savedCities[i].pressure;
+                                $scope.boards[j].cities[k].temp = savedCities[i].temp;
+                                $scope.boards[j].cities[k].text = savedCities[i].text;
                             }
                         }
                     }
-                });                
-            });
-        } 
+                }
+            });                
+        });
+
     };
 
 

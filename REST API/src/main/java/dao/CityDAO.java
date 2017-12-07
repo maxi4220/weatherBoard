@@ -13,12 +13,12 @@ import weatherBoard.Response;
 public abstract class CityDAO extends MySQLAccess{
 
     // Inserts into the table boards_cities the list of idCity the user selected for a specific board
-    public static Response addCitiesToBoard(byte idBoard, City[] cities) throws Exception {
+    public static Response addCitiesToBoard(Long idBoard, City[] cities) throws Exception {
         try {
         	String query = "";
         	List<City> resultCities = new ArrayList<City>();
         	City auxCity;
-        	byte aux = 1;
+        	int aux = 1;
         	
         	if(!BoardDAO.existsBoard(idBoard)) {
         		return new Response("warn", "The idBoard " + idBoard + " does not exist.");
@@ -31,8 +31,8 @@ public abstract class CityDAO extends MySQLAccess{
 	            	
 	            	// Gets the cities by idboard
 		            statement = (PreparedStatement) connect.prepareStatement("{call sp_add_cities_to_board(?,?)}");
-		            statement.setByte(1, idBoard);
-		            statement.setByte(2, city.getId());
+		            statement.setLong(1, idBoard);
+		            statement.setLong(2, city.getId());
 
 		            try {
 			            statement.executeUpdate();
@@ -47,16 +47,16 @@ public abstract class CityDAO extends MySQLAccess{
 	            statement = (PreparedStatement) connect.prepareStatement(query);
 
 	            for(City city : cities) {
-	            	statement.setByte(aux++, city.getId());
+	            	statement.setLong(aux++, city.getId());
 	            }
 	            try {
 		            ResultSet rs = statement.executeQuery();
 		            while(rs.next()) {
 		            	auxCity = new City(
-		            			rs.getByte("id"),
+		            			rs.getLong("id"),
 		            			rs.getString("woeid"),
 		            			rs.getString("name"),
-		            			rs.getByte("humidity"),
+		            			rs.getLong("humidity"),
 		            			rs.getBigDecimal("pressure"),
 		            			rs.getBigDecimal("temp"),
 		            			rs.getString("text")
@@ -77,7 +77,7 @@ public abstract class CityDAO extends MySQLAccess{
     }    
     
     // Returns a list of cities filtered by idBoard
-    public static Response getCitiesByIdBoard(byte idBoard) {
+    public static Response getCitiesByIdBoard(Long idBoard) {
         try {
         	List<City> cities = new ArrayList<City>();
         	City city;
@@ -87,7 +87,7 @@ public abstract class CityDAO extends MySQLAccess{
             // We get the cities by idboard
             if(idBoard > 0) {
 	            statement = (PreparedStatement) connect.prepareStatement("select * from weatherBoard.cities c inner join weatherBoard.boards_cities bc on c.id = bc.idcity where bc.idboard = ?");
-	            statement.setByte(1, idBoard);
+	            statement.setLong(1, idBoard);
             } else {
             	statement = (PreparedStatement) connect.prepareStatement("select * from weatherBoard.cities");
             }
@@ -96,10 +96,10 @@ public abstract class CityDAO extends MySQLAccess{
             // Loops the resultset, creates a City object for each record and adds it to the cities Array 
             while(resultSet.next()) {
             	city = new City(
-            			resultSet.getByte("id"),
+            			resultSet.getLong("id"),
             			resultSet.getString("woeid"),
             			resultSet.getString("name"),
-            			resultSet.getByte("humidity"),
+            			resultSet.getLong("humidity"),
             			resultSet.getBigDecimal("pressure"),
             			resultSet.getBigDecimal("temp"),
             			resultSet.getString("text")

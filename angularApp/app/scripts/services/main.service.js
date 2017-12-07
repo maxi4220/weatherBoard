@@ -48,7 +48,7 @@ weatherBoardApp.service("mainService", [ "$http", function($http) {
 
     // Changes a board's name
     this.changeBoardName = (board, callback) => {
-        $http.put("http://localhost:8080/boards", board)
+        $http.put(`http://localhost:8080/boards/${board.id}`, board.name)
         .then(
             response => {
                 callback(response.data);
@@ -61,7 +61,7 @@ weatherBoardApp.service("mainService", [ "$http", function($http) {
 
     // Gets all cities
     this.loadCities = callback => {
-        $http.get("http://localhost:8080/cities/0")
+        $http.get("http://localhost:8080/cities")
         .then(
             response => {
                 callback(response.data);
@@ -74,12 +74,8 @@ weatherBoardApp.service("mainService", [ "$http", function($http) {
 
     // Adds cities to a board
     this.addCities = (idBoard, cities, callback) => {
-        var jsonCities = [];
-        for(let i = 0; i < cities.length; i++){
-            var city = {"id": cities[i]};
-            jsonCities.push(city);
-        }
-        $http.post(`http://localhost:8080/cities/${idBoard}`, jsonCities)
+
+        $http.post(`http://localhost:8080/cities/${idBoard}`, cities)
         .then(
             response => {
                 callback(response.data);

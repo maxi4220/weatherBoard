@@ -82,7 +82,7 @@ io.on("connection", client => {
 
 			        			// Formats the update clause
 			        			update = mysql.format( 'UPDATE cities SET ? WHERE ?', [paramCity, whereClause]);
-
+			        			console.log(update);
 			        			// Update the database with new values
 			        			con.query(update, (err, cities) => {
 			        				if (err) console.log(err);

@@ -9,7 +9,7 @@ import model.User;
 import weatherBoard.Response;
 
 public abstract class UserDAO extends MySQLAccess{
-	private static byte id;
+	private static Long id;
 
     // Checks whether a user is in the users table
     public static boolean existsUser(String userName) throws Exception {
@@ -20,7 +20,7 @@ public abstract class UserDAO extends MySQLAccess{
 	        try {
 	        	resultSet = statement.executeQuery();
 	        	if(resultSet.next()) {
-	        		id =  resultSet.getByte("id");
+	        		id =  resultSet.getLong("id");
 	        		return true;
 	        	}else {
 	        		return false;
@@ -54,7 +54,7 @@ public abstract class UserDAO extends MySQLAccess{
 	            	return new Response("warn", "There was a problem trying to create the user.");
 	            }else {
 	            	user = new User(rs.getString("name"));
-	            	user.setId((rs.getByte("id")));
+	            	user.setId((rs.getLong("id")));
 	            	return new Response("success", user);
 	            }          	
 

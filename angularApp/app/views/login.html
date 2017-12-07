@@ -1,4 +1,6 @@
-<button type="button" class="btn btn-link" data-toggle="modal" data-target="#loginForm" ng-click="focusOn('userName',500)">Login</button>
+<span ng-show="loggedIn"><strong>Howdy {{user.name.toUpperCase()}}!</strong></span>
+<button id="btnLogin" ng-show="!loggedIn" type="button" class="btn btn-link" data-toggle="modal" data-target="#loginForm" ng-click="focusOn('userName',300)">Login</button>
+<button id="btnLogout" ng-show="loggedIn" type="button" class="btn btn-link" ng-click="logout()">Logout</button>
 <!-- Modal -->
 <div id="loginForm" class="modal fade" role="dialog">
   <div class="modal-dialog">

@@ -5,7 +5,13 @@ public class Response {
 	public Object data;
 	
 	public Response(String status, Object data) {
+		String aux;
 		this.status = status;
-		this.data = data;		
+		if(data.getClass()==String.class) {
+			aux = (String)data;
+			aux = aux.replaceAll("\"", "\\\"");
+			data = aux;
+		}
+		this.data = data;
 	}
 }

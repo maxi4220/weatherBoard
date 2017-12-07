@@ -53,23 +53,17 @@
                   <th>Rh</th>
                   <th>Pres</th>
                   <th>T°</th>
-                  <th>Sky</th>
+                  <th>Forecast</th>
                   <th></th>
                 </tr>
               </thead>
-              <!--
-                hot #F44336
-                warm #FFC107
-                cold #2196F3
-
-              -->
               <tbody>
                 <tr ng-repeat="city in board.cities">
                   <td>{{city.name}}</td>
-                  <td nowrap>{{city.humidity}} %</td>
-                  <td nowrap>{{city.pressure}} hPa</td>
-                  <td nowrap>{{ ((city.temp-32)/1.8).toFixed(1) }} °</td>
-                  <td nowrap><img src="images/{{city.text}}.png" alt="{{city.text}}" title="{{city.text}}" class="img-responsive" /></td>
+                  <td nowrap class="fade-in-fx">{{city.humidity}} %</td>
+                  <td nowrap class="fade-in-fx">{{city.pressure}} hPa</td>
+                  <td nowrap class="fade-in-fx" ng-class="{'cold-color':((city.temp-32)/1.8).toFixed(1)<=17, 'warm-color':((city.temp-32)/1.8).toFixed(1) > 17 && ((city.temp-32)/1.8).toFixed(1) < 25, 'hot-color':((city.temp-32)/1.8).toFixed(1)>=25 && ((city.temp-32)/1.8).toFixed(1)<30, 'boiling-color':((city.temp-32)/1.8).toFixed(1)>=30}">{{ ((city.temp-32)/1.8).toFixed(1) }} °</td>
+                  <td nowrap class="fade-in-fx" ng-show="city.text!=''"><img ng-src="images/{{city.text}}.png" alt="{{city.text}}" title="{{city.text}}" class="img-responsive" /></td>
                   <td align="right">
                     <button class="btn btn-xs btn-danger" ng-click="removeCity(board.id, city.id)">
                       <i class="glyphicon glyphicon-remove"> </i>

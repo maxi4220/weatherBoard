@@ -13,7 +13,7 @@ import weatherBoard.Response;
 public abstract class BoardDAO extends MySQLAccess{
 
     // Deletes from the table boards_cities the list of idCity the user selected for a specific board
-    public static Response removeCitiesFromBoard(byte idBoard, byte idCity) throws Exception {
+    public static Response removeCitiesFromBoard(Long idBoard, Long idCity) throws Exception {
         try {
         	if(!existsBoard(idBoard)) {
         		return new Response("warn", "The idBoard " + idBoard + " does not exist.");
@@ -22,8 +22,8 @@ public abstract class BoardDAO extends MySQLAccess{
 	            
             	// Gets the cities by idboard
 	            statement = (PreparedStatement) connect.prepareStatement("{call sp_remove_cities_from_board(?,?)}");
-	            statement.setByte(1, idBoard);
-	            statement.setByte(2, idCity);
+	            statement.setLong(1, idBoard);
+	            statement.setLong(2, idCity);
 
 	            try {
 		            statement.executeUpdate();
@@ -65,7 +65,7 @@ public abstract class BoardDAO extends MySQLAccess{
 
             		while(resultSet.next()) {
             			board = new Board();
-            			board.setId(resultSet.getByte("id"));
+            			board.setId(resultSet.getLong("id"));
             			board.setName(resultSet.getString("name"));
 		            	boards.add(board);
 		            }
@@ -83,16 +83,16 @@ public abstract class BoardDAO extends MySQLAccess{
         }
     }
     // Checks whether an idBoard is in the boards table
-    public static boolean existsBoard(byte idBoard) throws Exception {
+    public static boolean existsBoard(Long idBoard) throws Exception {
 
     	try {
 	    	connectToDB();
 	        statement = (PreparedStatement) connect.prepareStatement("select count(*) qty from boards where id = ?");
-	        statement.setByte(1, idBoard);
+	        statement.setLong(1, idBoard);
 	        try {
 	        	resultSet = statement.executeQuery();
 	        	resultSet.next();
-	        	if(resultSet.getByte("qty") > 0) {
+	        	if(resultSet.getLong("qty") > 0) {
 	        		return true;
 	        	}else {
 	        		return false;
@@ -134,7 +134,7 @@ public abstract class BoardDAO extends MySQLAccess{
 		            	return new Response("warn", "There was a problem trying to create the user.");
 		            }else {
 		            	board = new Board();
-		            	board.setId(rs.getByte("id"));
+		            	board.setId(rs.getLong("id"));
 		            	board.setName(rs.getString("name"));
 		            	return new Response("success", board);
 		            }
@@ -154,7 +154,7 @@ public abstract class BoardDAO extends MySQLAccess{
 	    	connectToDB();
 
 	        statement = (PreparedStatement) connect.prepareStatement("{ call sp_change_board_name (?, ?) }");
-	        statement.setByte(1, board.getId());
+	        statement.setLong(1, board.getId());
 	        statement.setString(2, board.getName());
 
             try {

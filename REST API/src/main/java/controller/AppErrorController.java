@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import weatherBoard.Response;
+
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,13 +24,11 @@ public class AppErrorController implements ErrorController {
     private ErrorAttributes errorAttributes;
     
     @RequestMapping("/error")
-    public String handleError(HttpServletRequest request, HttpServletResponse response) {
+    public Response handleError(HttpServletRequest request, HttpServletResponse response) {
 
-    	String strError = "";
     	RequestAttributes requestAttributes = new ServletRequestAttributes(request);
         Map<String, Object> reqErr = errorAttributes.getErrorAttributes(requestAttributes, false);
-    	strError = "{\"error\":\"" + reqErr.get("message") + "\"}";
-        return strError;
+        return new Response("error", reqErr.get("message"));
     }
 
 	@Override
