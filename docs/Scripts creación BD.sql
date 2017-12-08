@@ -1,6 +1,16 @@
 CREATE SCHEMA weatherBoard;
 USE weatherBoard;
 
+delete from boards_cities;
+delete from users;
+delete from boards;
+delete from cities;
+
+drop table boards_cities;
+drop table users;
+drop table boards;
+drop table cities;
+
 CREATE TABLE users (
 	id INT(2) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(80) NOT NULL
@@ -30,83 +40,6 @@ create table boards_cities(
     primary key(idboard, idcity)
 );
 
-DELIMITER $$
-
-DROP PROCEDURE IF EXISTS `sp_add_cities_to_board` $$
-CREATE PROCEDURE `sp_add_cities_to_board`(
-  IN pIdBoard int(1),
-  IN pIdCity int(1)
-)
-BEGIN
-	DECLARE vExists bit;
-    
-    select count(*) into vExists
-	from boards_cities 
-	where  	idBoard = pIdBoard
-		and idCity = pIdCity;
-        
-	IF vExists = 0 THEN
-		insert into boards_cities values(
-			pIdBoard,
-			pIdCity
-		);
-	END IF;
-END $$
-
-DELIMITER ;
-
-DELIMITER $$
-
-DROP PROCEDURE IF EXISTS `sp_remove_cities_from_board` $$
-CREATE PROCEDURE `sp_remove_cities_from_board`(
-  IN pIdBoard int(1),
-  IN pIdCity int(1)
-)
-BEGIN
-	delete from boards_cities 
-    where 	idBoard = pIdBoard
-		and idCity = pIdCity;
-END $$
-
-DELIMITER ;
-
-
-DELIMITER $$
-
-DROP PROCEDURE IF EXISTS `sp_add_user` $$
-CREATE PROCEDURE `sp_add_user`(
-  IN pName varchar(80)
-)
-BEGIN
-	DECLARE vExists bit;
-    
-    select count(*) into vExists
-	from users
-	where  	upper(name)= pName;
-        
-	IF vExists = 0 THEN
-		insert into users(name) values(pName);
-        insert into boards (iduser) values(LAST_INSERT_ID());
-	END IF;
-END $$
-
-DELIMITER ;
-
-
-DELIMITER $$
-
-DROP PROCEDURE IF EXISTS `sp_add_board` $$
-CREATE PROCEDURE `sp_add_board`(
-  IN pName varchar(80)
-)
-BEGIN
-
-	insert into boards (iduser) 
-	values((select id from users where upper(name)= pName));
-
-END $$
-
-DELIMITER ;
 
 
 
@@ -121,10 +54,6 @@ insert into cities (woeid, name) values(332474, 'Santiago del Estero');
 insert into cities (woeid, name) values(467039, 'Rawson');
 insert into cities (woeid, name) values(466869, 'Paraná');
 commit;
-insert into users (name, nickname, password) values ('Maximiliano Pozzi', 'maxi', 'pass');
-insert into boards (iduser) values (1);
-insert into boards_cities values (1, 1);
-
 
 
 
@@ -132,6 +61,4 @@ select * from boards;
 select * from cities;
 select * from boards_cities;
 select * from users;
-delete from boards where id > 1;
-delete from boards_cities where idboard > 1;
 
