@@ -1,8 +1,6 @@
+C:\sistemas\weatherBoard\REST API\src\main\java\model\CityForecast.java
 C:\sistemas\weatherBoard\REST API\src\main\java\controller\UserController.java
-C:\sistemas\weatherBoard\REST API\src\main\java\dao\MySQLAccess.java
 C:\sistemas\weatherBoard\REST API\src\main\java\controller\CityController.java
-C:\sistemas\weatherBoard\REST API\src\main\java\dao\CityDAO.java
-C:\sistemas\weatherBoard\REST API\src\main\java\dao\UserDAO.java
 C:\sistemas\weatherBoard\REST API\src\main\java\weatherBoard\Response.java
 C:\sistemas\weatherBoard\REST API\src\main\java\controller\BoardController.java
 C:\sistemas\weatherBoard\REST API\src\main\java\repository\BoardRepository.java
@@ -13,4 +11,3 @@ C:\sistemas\weatherBoard\REST API\src\main\java\model\City.java
 C:\sistemas\weatherBoard\REST API\src\main\java\weatherBoard\Application.java
 C:\sistemas\weatherBoard\REST API\src\main\java\repository\CityRepository.java
 C:\sistemas\weatherBoard\REST API\src\main\java\model\Board.java
-C:\sistemas\weatherBoard\REST API\src\main\java\dao\BoardDAO.java

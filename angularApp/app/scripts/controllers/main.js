@@ -25,6 +25,11 @@ weatherBoardApp
     $scope.showEditBoardButton = [];
     $scope.tmpBoardName = "";
     $scope.loggedIn = false;
+    $scope.extendedForecastCities = [];
+    $scope.forecastDays = [];
+
+    const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
     var movementStrength = 25;
     var height = movementStrength / $(window).height();
     var width = movementStrength / $(window).width();
@@ -55,6 +60,7 @@ weatherBoardApp
                         $scope.defineSocketEvents();
                         $scope.loggedIn = true;
                     	$scope.cities = [];
+                        $scope.loadForecastDays();
 
                         const user = {"id":response.data, "name":userName};
                         // Validated the user is found
@@ -244,48 +250,46 @@ weatherBoardApp
 
     $scope.defineSocketEvents = () => {
         
-        if($scope.socket){
-            io.disconnect();
-        }
-        $scope.socket = io.connect('http://localhost:9000');
-        $scope.socket.on("citiesStatus", savedCities => {
-            $scope.$apply(() => {
-                let boards = $scope.boards;
-                let cities;
+        if(!$scope.socket){
+            $scope.socket = io.connect('http://localhost:9000');
+            $scope.socket.on("citiesStatus", savedCities => {
+                $scope.$apply(() => {
+                    let boards = $scope.boards;
+                    let cities;
 
-                savedCities = JSON.parse(savedCities);
-                
-                // Loops all updated cities
-                for(let i = 0, savedCitiesLen = savedCities.length;
-                        i < savedCitiesLen;
-                        i++) {
+                    savedCities = JSON.parse(savedCities);
+                    
+                    // Loops all updated cities
+                    for(let i = 0, savedCitiesLen = savedCities.length;
+                            i < savedCitiesLen;
+                            i++) {
 
-                    // Loops the current user boards
-                    for(let j = 0, boardsLen = boards.length;
-                            j < boardsLen;
-                            j++) {
+                        // Loops the current user boards
+                        for(let j = 0, boardsLen = boards.length;
+                                j < boardsLen;
+                                j++) {
 
-                        // Current board
-                        cities = boards[j].cities;
+                            // Current board
+                            cities = boards[j].cities;
 
-                        // Loops all cities of the current board
-                        for(let k = 0, citiesLen = cities.length;
-                            k < citiesLen;
-                            k++) {
+                            // Loops all cities of the current board
+                            for(let k = 0, citiesLen = cities.length;
+                                k < citiesLen;
+                                k++) {
 
-                            // Updates our $scope cities array so that the changes are seen on the view
-                            if($scope.boards[j].cities[k].id == savedCities[i].id) {
-                                $scope.boards[j].cities[k].humidity = savedCities[i].humidity;
-                                $scope.boards[j].cities[k].pressure = savedCities[i].pressure;
-                                $scope.boards[j].cities[k].temp = savedCities[i].temp;
-                                $scope.boards[j].cities[k].text = savedCities[i].text;
+                                // Updates our $scope cities array so that the changes are seen on the view
+                                if($scope.boards[j].cities[k].id == savedCities[i].id) {
+                                    $scope.boards[j].cities[k].humidity = savedCities[i].humidity;
+                                    $scope.boards[j].cities[k].pressure = savedCities[i].pressure;
+                                    $scope.boards[j].cities[k].temp = savedCities[i].temp;
+                                    $scope.boards[j].cities[k].text = savedCities[i].text;
+                                }
                             }
                         }
                     }
-                }
-            });                
-        });
-
+                });                
+            });
+        }
     };
 
 
@@ -346,4 +350,33 @@ weatherBoardApp
     $scope.focusOn = (id, ms) => {
         $timeout(() => {angular.element("#"+id).focus()}, ms);
     };
+
+    $scope.findForecastByDay = idx => {
+        ngNotify.set("Getting forecast...", "info");
+        $scope.extendedForecastCities = [];
+
+        // Gets status of all cities in a board by date
+        mainService.findForecastByDay(
+            $scope.selectedIdBoard,
+            $scope.forecastDays[idx], 
+            response => {            
+            // Got an error
+            if(response.status !== "success") {
+                ngNotify.set(response.data, response.status);
+            } else {
+                $scope.extendedForecastCities = response.data;
+                ngNotify.set("Done!", "success");
+            }
+        });
+    };
+
+    $scope.loadForecastDays = () => {
+        var date = new Date()
+        $scope.forecastDays = [];
+        for(let i = 1; i < 6; i ++) {
+            date.setDate(date.getDate()+1);
+            $scope.forecastDays.push(DAY_NAMES[date.getDay()]);
+        }
+    };
+
 }]);

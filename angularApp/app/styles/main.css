@@ -163,17 +163,20 @@ body {
   text-shadow: 1px 1px 1px #fff;
 }
 .hot-color {
-  color:#F44336;
+  color:#FF7305;
   font-weight: bold;
   text-shadow: 1px 1px 1px #fff;
 }
 .boiling-color {
-  color:#FF632E;
+  color:#FF2301;
   font-weight: bold;
   text-shadow: 1px 1px 1px #fff;
 }
 .fade-in-fx {
   animation: fadein 0.75s;
+}
+.btn-forecast {
+  width: 50px;
 }
 @keyframes fadein {
   0% {

@@ -6,6 +6,8 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const request = require('request');
 const mysql = require('mysql');
+const fs = require("fs");
+
 
 const port = 9000;
 const max_count = 1950;
@@ -21,7 +23,14 @@ app.use(express.static(__dirname + "/app"));
 
 // Request routing
 app.get('/', function (req, res) {
-	res.sendFile( './index.html');
+	res.sendFile("./index.html");
+});
+
+app.get('/SERVICE_IP', function (req, res) {
+		//Load configuracion file
+	fs.readFile("conf.json", (err,data) => {
+		res.send(JSON.parse(data).ip);
+	});
 });
 
 var con;
@@ -96,7 +105,7 @@ io.on("connection", client => {
 
 			        		// Notifies to the client the cities status changes
 			        		io.emit("citiesStatus", JSON.stringify(savedCities));
-			        	}
+			        	} 
 			        }
 				);
 

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import dao.BoardDAO;
 import model.Board;
 import model.City;
 import model.User;
@@ -41,7 +40,7 @@ public class BoardController {
 	 * 		@cities: array of idCity to associate to a board
 	 * History: Method created: 11/19/2017
 	 */
-	@CrossOrigin(origins = {"http://localhost:9000", "http://34.205.125.27:9000"})
+	@CrossOrigin(origins = {"http://localhost:9000", "http://34.227.148.48:9000"})
     @RequestMapping(value = "/cities/{idBoard}", method = RequestMethod.POST)
     public Response addCitiesToBoard(
     		@PathVariable("idBoard") Long idBoard, 
@@ -79,7 +78,7 @@ public class BoardController {
 	 * 		@cities: array of idCity to delete from a board
 	 * History: Method created: 11/19/2017
 	 */
-	@CrossOrigin(origins = {"http://localhost:9000", "http://34.205.125.27:9000"})
+	@CrossOrigin(origins = {"http://localhost:9000", "http://34.227.148.48:9000"})
     @RequestMapping(value = "/boards/{idBoard}/{idCity}", method = RequestMethod.DELETE)
     public Response removeCityFromBoard(
     		@PathVariable Long idBoard, 
@@ -104,7 +103,7 @@ public class BoardController {
 	 * 		@userName: name of the user
 	 * History: Method created: 11/23/2017
 	 */
-	@CrossOrigin(origins = {"http://localhost:9000", "http://34.205.125.27:9000"})
+	@CrossOrigin(origins = {"http://localhost:9000", "http://34.227.148.48:9000"})
     @RequestMapping(value = "/boards/{userName}", method = RequestMethod.GET)
     public Response findBoardsByUserName(@PathVariable String userName) {
    		try {
@@ -136,7 +135,7 @@ public class BoardController {
 	 * 		@userName: name of the user
 	 * History: Method created: 11/26/2017
 	 */
-	@CrossOrigin(origins = {"http://localhost:9000", "http://34.205.125.27:9000"})
+	@CrossOrigin(origins = {"http://localhost:9000", "http://34.227.148.48:9000"})
     @RequestMapping(value = "/boards/{userName}", method = RequestMethod.POST)
     public Response addBoard(@PathVariable String userName) {
    		try {
@@ -161,7 +160,7 @@ public class BoardController {
 	 * 		@idBoard: id of the board
 	 * History: Method created: 11/30/2017
 	 */
-	@CrossOrigin(origins = {"http://localhost:9000", "http://34.205.125.27:9000"})
+	@CrossOrigin(origins = {"http://localhost:9000", "http://34.227.148.48:9000"})
     @RequestMapping(value = "/boards/{idBoard}", method = RequestMethod.PUT)
     public Response changeBoardName(
     		@PathVariable Long idBoard,

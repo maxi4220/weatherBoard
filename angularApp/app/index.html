@@ -12,6 +12,7 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/ng-notify/src/styles/ng-notify.css" />
+    
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -58,12 +59,20 @@
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script type="text/javascript">
+        var SERVICE_IP;
+        $.ajax({
+            url:"http://localhost:9000/SERVICE_IP", 
+            method:"GET",
+            success: (data)=>{
+                SERVICE_IP = data;
+            }
+        });
+    </script>
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/services/main.service.js"></script>
-    <script src="scripts/services/login.service.js"></script>
-    <script src="scripts/services/boards.service.js"></script>
-    <script src="scripts/services/data.service.js"></script>
+
     <!-- endbuild -->
 </body>
 </html>

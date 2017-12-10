@@ -4,7 +4,6 @@
 */
 package model;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -30,9 +29,9 @@ public final class City {
 	private Long id;
 	private String woeid;
 	private String name;
-	private Long humidity;
-	private BigDecimal pressure;
-	private BigDecimal temp;
+	private Integer humidity;
+	private Double pressure;
+	private Integer temp;
 	private String text;
 
 	private List<Board> boards;
@@ -43,9 +42,9 @@ public final class City {
     		Long 		id,
     		String 		woeid,
     		String 		name,
-    		Long 		humidity,
-    		BigDecimal 	pressure,
-    		BigDecimal 	temp,
+    		Integer		humidity,
+    		Double	 	pressure,
+    		Integer	 	temp,
     		String 		text) {
     	this.setId(id);
     	this.setWoeid(woeid);
@@ -82,27 +81,27 @@ public final class City {
 		this.name = name;
 	}
 
-	public Long getHumidity() {
+	public Integer getHumidity() {
 		return humidity;
 	}
 
-	public void setHumidity(Long humidity) {
+	public void setHumidity(Integer humidity) {
 		this.humidity = humidity;
 	}
 
-	public BigDecimal getPressure() {
+	public Double getPressure() {
 		return pressure;
 	}
 
-	public void setPressure(BigDecimal pressure) {
+	public void setPressure(Double pressure) {
 		this.pressure = pressure;
 	}
 
-	public BigDecimal getTemp() {
+	public Integer getTemp() {
 		return temp;
 	}
 
-	public void setTemp(BigDecimal temp) {
+	public void setTemp(Integer temp) {
 		this.temp = temp;
 	}
 
