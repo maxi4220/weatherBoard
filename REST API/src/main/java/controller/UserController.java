@@ -23,7 +23,7 @@ public class UserController {
 	@Autowired
 	private BoardRepository boardRepository;
 
-	@CrossOrigin(origins = {"http://localhost:9000", "http://34.227.148.48:9000"})
+	@CrossOrigin(origins = {"http://localhost:9000", "http://34.201.38.123:9000"})
     @RequestMapping(value = "/login/{userName}", method = RequestMethod.GET)
     public Response login(@PathVariable("userName") String userName) {
     	try {

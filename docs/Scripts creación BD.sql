@@ -1,7 +1,7 @@
-CREATE SCHEMA weatherBoard;
+/*CREATE SCHEMA weatherBoard;*/
 USE weatherBoard;
 
-delete from boards_cities;
+/*delete from boards_cities;
 delete from cities;
 delete from boards;
 delete from users;
@@ -10,7 +10,7 @@ drop table boards_cities;
 drop table cities;
 drop table boards;
 drop table users;
-
+*/
 CREATE TABLE users (
 	id INT(2) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(80) NOT NULL
@@ -58,8 +58,8 @@ commit;
 
 
 
-select * from boards;
+/*select * from boards;
 select * from cities;
 select * from boards_cities;
 select * from users;
-
+*/

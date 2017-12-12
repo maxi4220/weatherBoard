@@ -3,7 +3,7 @@ Implementation-Title: gs-rest-service
 Implementation-Version: 0.1.0
 Built-By: Maxi
 Implementation-Vendor-Id: org.springframework
-Build-Jdk: 1.8.0_152
+Build-Jdk: 1.8.0_151
 Implementation-URL: http://projects.spring.io/spring-boot/gs-rest-serv
  ice/
 Created-By: Maven Integration for Eclipse

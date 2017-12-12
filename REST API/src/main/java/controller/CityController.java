@@ -30,7 +30,7 @@ public class CityController {
 	@Autowired
 	private CityRepository cityRepository;
 
-	@CrossOrigin(origins = {"http://localhost:9000", "http://34.227.148.48:9000"})
+	@CrossOrigin(origins = {"http://localhost:9000", "http://34.201.38.123:9000"})
     @RequestMapping(value = "/cities/{idBoard}")
     public Response findCitiesByIdBoard(
     		@PathVariable("idBoard") Long idBoard) {
@@ -47,7 +47,7 @@ public class CityController {
     	
     }
 
-	@CrossOrigin(origins = {"http://localhost:9000", "http://34.227.148.48:9000"})
+	@CrossOrigin(origins = {"http://localhost:9000", "http://34.201.38.123:9000"})
 	@RequestMapping(value = "/cities", method = RequestMethod.GET)
 	public Response findAll() {
    		try {
@@ -65,7 +65,7 @@ public class CityController {
     }
 	
 	// Consumes the yahoo weather service and returns a list of cities with their status by day
-	@CrossOrigin(origins = {"http://localhost:9000", "http://34.227.148.48:9000"})
+	@CrossOrigin(origins = {"http://localhost:9000", "http://34.201.38.123:9000"})
     @RequestMapping(value = "/cities/{idBoard}/{day}")
 	private Response findForecastByDay(
 			@PathVariable("idBoard") Long idBoard, 
