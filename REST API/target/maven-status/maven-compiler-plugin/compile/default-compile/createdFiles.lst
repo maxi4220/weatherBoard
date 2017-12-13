@@ -1,0 +1,13 @@
+model\Board.class
+weatherBoard\Application.class
+repository\BoardRepository.class
+controller\UserController.class
+model\CityForecast.class
+controller\BoardController.class
+weatherBoard\Response.class
+controller\CityController.class
+controller\AppErrorController.class
+repository\UserRepository.class
+model\City.class
+model\User.class
+repository\CityRepository.class

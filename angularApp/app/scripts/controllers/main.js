@@ -251,7 +251,7 @@ weatherBoardApp
     $scope.defineSocketEvents = () => {
         
         if(!$scope.socket){
-            $scope.socket = io.connect('http://localhost:9000');
+            $scope.socket = io.connect('http://34.238.121.215:9000');
             $scope.socket.on("citiesStatus", savedCities => {
                 $scope.$apply(() => {
                     let boards = $scope.boards;

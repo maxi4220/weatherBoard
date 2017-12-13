@@ -1,4 +1,4 @@
-/*CREATE SCHEMA weatherBoard;*/
+CREATE SCHEMA weatherBoard;
 USE weatherBoard;
 
 /*delete from boards_cities;
